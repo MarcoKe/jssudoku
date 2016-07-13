@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="description" content="Sudoku">
+    <meta name="author" content="Marco Kemmerling">
+
+    <title>Sudoku</title>
+    <script src="jquery-3.0.0.min.js"></script>
+    <script src="sudoku.js"></script>
+    <script type = "text/javascript" language = "javascript">
+      $(document).ready(function() {
+        initialize()
+
+        $('#solve').bind('click', function( event ){
+              solve();
+              update();
+            });
+      });
+
+
+    </script>
+
+    <style >
+      #header {
+        height: 100px
+      }
+      #main {
+        width: 450px;
+        height: 450px;
+        margin-left: auto;
+        margin-right: auto;
+        outline: 2px solid;
+      }
+
+      div div {
+        width: 50px;
+        height: 50px;
+        /*outline: 1px solid;*/
+        float: left;
+        text-align: center;
+        display: table-cell;
+        vertical-align: middle;
+      }
+      #solve {
+        background-color: lavender;
+        text-align: center;
+        color: #000000;
+        margin: 50px;
+        width: 450px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    </style>
+
+</head>
+<body>
+<!-- JQuery & Bootstrap script files -->
+
+<div id="header"></div>
+<div id="main">
+
+</div>
+
+<div id="solve">Solve</div>
+
+</body>
+</html>
