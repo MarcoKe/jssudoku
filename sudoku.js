@@ -3,7 +3,9 @@ puzzle = [[0,0,3,9,0,0,0,5,1],[5,4,6,0,1,8,3,0,0],[0,0,0,0,0,7,4,2,0],
 [0,0,9,0,5,0,0,3,0],[2,0,0,6,0,3,0,0,4],[0,8,0,0,7,0,2,0,0],
 [0,9,7,3,0,0,0,0,0],[0,0,1,8,2,0,9,4,7],[8,5,0,0,0,4,6,0,0]];
 
-
+puzzle3 = [[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]];
 puzzle2 = [[9,4,1,6,5,3,2,7,8],[2,5,8,4,9,7,6,3,1],[3,6,7,1,8,2,5,4,9],
 [1,3,2,9,6,8,4,5,7],[4,7,9,5,0,1,8,6,2],[5,8,6,7,2,4,9,1,3],
 [8,2,4,3,7,6,1,9,5],[6,9,3,2,1,5,7,8,4],[7,1,5,8,4,9,3,2,6]];
@@ -14,13 +16,26 @@ function initialize() {
   table = "";
   for (var i = 0; i < 9; i++) {
     for (var j = 0; j < 9; j++) {
-      table += "<div id=c" + i + "" + j + ">" + (puzzle[i][j] != 0 ? puzzle[i][j] : "") + "</div>";
+      table += "<div ";
+      table += (puzzle[i][j] === 0 ? "class=\"changeable\" contentEditable=true " : "");
+      table+= "id=c" + i + "" + j + ">" + (puzzle[i][j] != 0 ? puzzle[i][j] : "") + "</div>";
       console.log(i);
     }
    }
    $("#main").append(table);
    colorFixed(fixedCells(puzzle));
    drawGrid();
+
+   listenToInput();
+}
+
+function listenToInput() {
+  $('.changeable').focusout(function() {
+    var id = this.id;
+    var value = parseInt($("#" + id).text());
+    console.log(typeof value)
+    puzzle[id.charAt(1)][id.charAt(2)] = (value % 1 === 0 ? value : 0);
+  });
 }
 
 function fixedCells(p) {
@@ -81,7 +96,7 @@ function update() {
    table = "";
    for (var i = 0; i < 9; i++) {
      for (var j = 0; j < 9; j++) {
-       table += "<div id=c" + i + "" + j + ">" + puzzle[i][j] + "</div>";
+       table += "<div contentEditable=true id=c" + i + "" + j + ">" + puzzle[i][j] + "</div>";
        cell = "#c" + i + "" + j;
        $(cell).text(puzzle[i][j]);
      }
@@ -116,7 +131,9 @@ function bruteforce(p) {
   var row = empty[0];
   var col = empty[1];
 
-  for (var num = 1; num <= 9; num++) {
+  numbers = shuffle();
+  for (var i = 0; i < 9; i++) {
+    num = numbers[i];
     if(isValidChoice(p, row, col, num)) {
       p[row][col] = num;
       // name = "c" + row + "" + col;
@@ -130,7 +147,23 @@ function bruteforce(p) {
   return false;
 }
 
+function shuffle() {
+  var numbers = [1,2,3,4,5,6,7,8,9];
+  var counter = numbers.length;
 
+  // fisher-yates shuffle
+  while (counter > 0) {
+    var index = Math.floor(Math.random() * counter);
+
+    counter--;
+
+    var tmp = numbers[counter];
+    numbers[counter] = numbers[index];
+    numbers[index] = tmp;
+  }
+
+  return numbers;
+}
 
 function findEmptyCell(puzzle) {
   var row = 10;
